@@ -61,11 +61,15 @@ kirito_strength = initial_info[0]
 no_of_dragons = initial_info[1]
 
 
-#Initialize a list to store dragon's level-reward pairs
-dragonList = []
+#Initialize a dictionary to store dragon's level-reward pairs
+dragonDict = {}
 for i in range(no_of_dragons):
     dragon_stats = list(map(int, input().split()))
-    dragonList.append(dragon_stats)
+    if (len(dragonDict) != 0 and (dragon_stats[0] in dragonDict.keys())):
+        dragonDict.update({dragon_stats[0]: dragonDict.get(dragon_stats[0]) + dragon_stats[1]})
+    else:
+        dragonDict.update({dragon_stats[0] : dragon_stats[1]})
+        #dragonDict = sorted(dragonDict)
 
 #Now that we've stored the values, we need to sort via a sorting algo. Let's go with quicksort
 
@@ -83,15 +87,19 @@ def quickSort(givenArray: list) -> list:
         #Recursion and combine
         return quickSort(left) + [pivot] + quickSort(right)
 
-#Sorting the dragonList
-dragonList = quickSort(dragonList)
+#Now we sort the values in dictionary from highest to lowest so that we can decide if Kirito can go ahead with his win
 
-#Check if Kirito can fight his way through
+dragonDict = {k: dragonDict[k] for k in quickSort(list(dragonDict.keys()))} #For 'k' in the sorted keys array, put key-value pair in dict
+
+#Now we see if kirito can do it 
 isAlive = True
-for i in range(len(dragonList)):
-    if (kirito_strength > dragonList[i][0]):
-        kirito_strength += dragonList[i][1]
+for dragonStrength in dragonDict.keys():
+
+    if kirito_strength > dragonStrength:
+        kirito_strength += dragonDict.get(dragonStrength) #The reward value associated with strength
+
     else:
         isAlive = False
 
-print("YES") if isAlive == True else print("NO")
+#Final decision logic
+print("YES") if (isAlive == True) else print("NO")
