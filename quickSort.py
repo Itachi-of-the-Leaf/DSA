@@ -13,7 +13,7 @@ def quickSort(array: list) -> list:
 
         return quickSort(left) + [pivot] + quickSort(right) #[pivot] not pivot because pivot is an integer and [pivot is a list]
 
-myArr = [6, 7, 87, 78, 67, 76]
+myArr = [6, 7, 7, 7,  87, 78, 67, 76]
 sortedArray = quickSort(myArr)
 
 print(sortedArray)
